@@ -1,6 +1,13 @@
 # AntSugUsers
-
 ***
+
+# Scopo del progetto
+ Lo scopo di questo progetto è creare una piattaforma studio in laravel - vue con cui mi possa esercitare e con cui possa sperimentare tale situazione.
+Inoltre, è anche quella, di creare un punto di salvataggio (esempio jira), dove tenere traccia di cosa fatto.
+
+## Da provare
+
+1. tirare su un progetto laravel con il docker
 
 
 ## Creazione del progetto
