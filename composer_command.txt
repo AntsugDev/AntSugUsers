@@ -1,0 +1,1 @@
+ composer require darkaonline/l5-swagger && composer require laravel/passport
