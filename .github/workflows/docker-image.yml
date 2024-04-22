@@ -30,7 +30,7 @@ jobs:
 #      run: |
 #           chmod 0777 /var/www/html/conf/entrypoint.sh
 #           ./var/www/html/conf/entrypoint.sh
-    - name: Tag Docker image
-      run:  docker image tag app-laravel:$(date +%s) ${{secrets.DOCKER_PATH_BASE}}/app-laravel:$(date +%s)
-    - name: Push Docker image
-      run: docker image push ${{secrets.DOCKER_PATH_BASE}}/app-laravel:$(date +%s)
+#    - name: Tag Docker image
+#      run:  docker image tag app-laravel:$(date +%s) ${{secrets.DOCKER_PATH_BASE}}/app-laravel:$(date +%s)
+#    - name: Push Docker image
+#      run: docker image push ${{secrets.DOCKER_PATH_BASE}}/app-laravel:$(date +%s)
