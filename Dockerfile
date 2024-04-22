@@ -16,3 +16,5 @@ WORKDIR /var/www/html
 COPY . .
 
 RUN composer install
+
+CMD ["/var/www/html/conf/entrypoint.sh"]
