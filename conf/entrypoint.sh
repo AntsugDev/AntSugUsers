@@ -10,4 +10,8 @@ cd /var/www/html
 
 npm install
 
+php artisan key:generate
+
+php artisan passport:install
+
 php artisan queue:work

@@ -16,6 +16,3 @@ WORKDIR /var/www/html
 COPY . .
 
 RUN composer install
-RUN php artisan key:generate
-#RUN php artisan queue:work
-CMD ["//var/www/html/conf/entrypoint.sh"]
