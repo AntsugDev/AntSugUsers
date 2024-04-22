@@ -26,10 +26,10 @@ jobs:
       run:  echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag app-laravel:$(date +%s)
-    - name: Laravel command
-      run: |
-           chmod 0777 /var/www/html/conf/entrypoint.sh
-           ./var/www/html/conf/entrypoint.sh
+#    - name: Laravel command
+#      run: |
+#           chmod 0777 /var/www/html/conf/entrypoint.sh
+#           ./var/www/html/conf/entrypoint.sh
     - name: Tag Docker image
       run:  docker image tag app-laravel:$(date +%s) ${{secrets.DOCKER_PATH_BASE}}/app-laravel:$(date +%s)
     - name: Push Docker image
