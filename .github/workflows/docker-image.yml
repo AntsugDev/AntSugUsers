@@ -19,4 +19,4 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag app-laravel:$(date +%s)
     - name: Laravel command
-      run: docker run app-laravel::$(date +%s) /var/www/html/conf/entrypoint.sh
+      run: docker run app-laravel:$(date +%s) /var/www/html/conf/entrypoint.sh
