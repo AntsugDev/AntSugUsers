@@ -14,6 +14,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: Cache Docker layers
+      uses: actions/cache@v2
+      with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile') }}
+          restore-keys: |
+            ${{ runner.os }}-docker-
+
     - name: Login to Docker Registry
       run:  echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
     - name: Build the Docker image
@@ -21,6 +30,6 @@ jobs:
 #    - name: Laravel command
 #      run: docker run app-laravel:$(date +%s) /var/www/html/conf/entrypoint.sh
     - name: Tag Docker image
-      run: echo "${{secrets.DOCKER_PATH_BASE}}" | docker tag ${{secrets.DOCKER_PATH_BASE}}/app-laravel:$(date +%s)
+      run:  docker app-laravel:$(date +%s) tag ${{secrets.DOCKER_PATH_BASE}}/app-laravel:$(date +%s)
     - name: Push Docker image
       run: docker push ${{secrets.DOCKER_PATH_BASE}}/app-laravel:$(date +%s)
