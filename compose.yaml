@@ -1,15 +1,6 @@
 version: "3.7"
 services:
-  app:
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    image: antsug-laravel:1.0
-    container_name: antsug-laravel
-    restart: unless-stopped
-    working_dir: /var/www/html
-    volumes:
-      - ./:/var/www/html
+
   db:
     image: mysql:8.0
     container_name: antsug-mysql
