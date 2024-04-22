@@ -1,0 +1,1 @@
+ npm install vite --save  &&     npm install laravel-vite-plugin --save  &&   npm install @vitejs/plugin-vue --save  &&   npm install vue --save  &&    npm install vue-router --save  &&    npm install vuetify --save  &&   npm install vuex --save
