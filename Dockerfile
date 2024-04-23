@@ -12,9 +12,11 @@ COPY conf/entrypoint.sh  /usr/local/bin/entrypoint.sh
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-WORKDIR /var/www/html
+WORKDIR /var/www/html/antsug
 COPY . .
+
+COPY /envorement/.env /var/www/html/antsug
 
 RUN composer install
 
-CMD ["/var/www/html/conf/entrypoint.sh"]
+CMD ["chmod +x /var/www/html/antsug/conf/entrypoint.sh","/var/www/html/antsug/conf/entrypoint.sh"]

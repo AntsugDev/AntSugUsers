@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -11,7 +12,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        app('url')->forceRootUrl(env('APP_URL'));
+        if (Str::contains(env('APP_URL'), 'https://')) {
+            app('url')->forceScheme('https');
+        }
     }
 
     /**
