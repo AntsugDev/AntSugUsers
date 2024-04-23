@@ -38,7 +38,7 @@ export default {
     methods:{
         logout: function (){
             this.$store.commit('user/deleteUser')
-            this.$router.push({name : 'ChooseLogin', query: {errors:"Logout effettuato"} })
+            this.$router.push({name : 'Login', query: {errors:"Logout effettuato"} })
             localStorage.clear()
         },
     }

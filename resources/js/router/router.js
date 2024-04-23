@@ -2,6 +2,7 @@ import {createRouter, createWebHistory} from "vue-router";
 import Login from "../general/Login.vue";
 import Home from "../general/Home.vue";
 import store from "../store/store.js";
+import moment from "moment";
 
 const router = createRouter({
     history:createWebHistory(store.getters['config/appBasePath']),
@@ -17,9 +18,18 @@ const router = createRouter({
             name: 'Home',
             component: Home,
             beforeEnter:(to,from,next) => {
-                if(!store.getters['user/getIsAuth'])
-                    next({name:'Login'})
-                next()
+                let $jwt              = store.getters['user/getJwt'];
+                let $auth             = store.getters['user/getIsAuthenticated'];
+                let $expired          = $jwt.expired;
+                let $now    = moment();
+                if(!$auth){
+                    next({ name: 'Login'});
+                }else{
+                    if($expired > $now){
+                        next();
+                    }else
+                        next({ name: 'Login' ,query:{errors:"Session exipred"}});
+                }
             }
 
         },

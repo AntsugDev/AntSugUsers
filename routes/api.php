@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Api\Passport\Controller\RootController;
+use App\Http\Api\Users\Controller\UserController;
+use App\Http\Api\WhoAmI\Controller\WhoAmIController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,7 +16,13 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::prefix(config('utils.prefix'))->group(function (){
 
-Route::middleware('auth:api')->prefix(config('utils.prefix'))->group(function (){
+    Route::get('root',[RootController::class,'index']);
+    Route::post('login',[UserController::class,'login']);
 
+    Route::middleware('auth:api')->group(function (){
+        Route::get('who_am_i', [WhoAmIController::class, 'who_am_i']);
+    });
 });
+

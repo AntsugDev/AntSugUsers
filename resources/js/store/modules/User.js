@@ -6,7 +6,12 @@ const state = () => ({
             expired: null,
             access_token: null,
         },
-        isAuthenticated: false
+        user:{
+            isAuthenticated: false,
+            firstName:null,
+            lastName:null,
+            email:null,
+        }
     }
 });
 
@@ -18,7 +23,7 @@ const getters = {
         return state.data.user
     },
     getIsAuth:function (state){
-        return state.data.isAuthenticated
+        return state.data.user.isAuthenticated
     }
 };
 const actions = {};

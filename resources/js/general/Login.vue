@@ -66,10 +66,13 @@
 </template>
 <script>
 import SnackBarCommon from "../component/Common/SnackBarCommon.vue";
+import {axiosInstance, POST} from "../plugin/instance.api.js";
+import storeComputed from "../mixins/storeComputed.js";
 
 export default {
     name: "Login",
     components: {SnackBarCommon},
+    mixins:[storeComputed],
     data:()=> ({
         valid: false,
         loading:false,
@@ -84,6 +87,27 @@ export default {
     }) ,
     methods:{
         login:function (){
+            this.loading = true
+            this.$refs.form.validate().then(r => {
+                if(r.valid){
+                    const formdata = new FormData();
+                    formdata.append("grant_type", "client_credentials");
+                    formdata.append("client_id", this.config.oauthPasswordClient.id);
+                    formdata.append("client_secret", this.config.oauthPasswordClient.secret);
+                    formdata.append("username", this.email);
+                    formdata.append("password", this.password);
+                    formdata.append("scope", "*");
+
+                    axiosInstance('/oauth/token',POST,formdata).then(r => {
+                        this.loading = false;
+                        this.$store.commit('user/token',r.data)
+                        this.$router.push({name:'Home'});
+                    }).catch(e => {
+                        this.loading = false
+                    })
+                }else
+                    this.loading = false
+            })
 
         }
     }

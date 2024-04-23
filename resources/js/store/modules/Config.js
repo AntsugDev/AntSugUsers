@@ -4,10 +4,6 @@ const state = () => ({
     drawer:true,
     mini:false,
     oauthPasswordClient: {},
-    rhsso: {},
-    uuid:null,
-    keyReCaptha: window.appConfig.keyReCaptha,
-    pKeyReCaptha: window.appConfig.pKeyReCaptha,
 
 });
 const getters = {
@@ -18,18 +14,6 @@ const getters = {
         let appUrlObject = new URL(state.appUrl);
         return appUrlObject.pathname;
     },
-    getConfigRhsso: function (state){
-        return state.rhsso
-    },
-    getUuid(state){
-        return state.uuid
-    },
-    getKeyCaptcha(state){
-        return state.keyReCaptha
-    },
-    getPKeyCaptcha(state){
-        return state.pKeyReCaptha
-    }
 };
 const actions = {};
 const mutations = {
@@ -48,11 +32,7 @@ const mutations = {
     },
     init(state,payload){
         state.oauthPasswordClient = payload.oauthPasswordClient
-        state.rhsso               =  payload.rhsso;
     },
-    setUuid: function (state,uuid){
-        state.uuid = uuid;
-    }
 
 };
 

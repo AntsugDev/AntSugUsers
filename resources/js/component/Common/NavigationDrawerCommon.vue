@@ -42,7 +42,7 @@
                 ></v-list-item>
             </v-list>
         </template>
-        <template v-slot:append v-if="!isKeycloack">
+        <template v-slot:append>
             <div class="pa-2 mb-5">
                 <v-btn to="/api/documentation" icon="mdi-api" target="_blank" alt="Documentation" title="Documentation"></v-btn>
             </div>
@@ -57,13 +57,12 @@ import {Menu} from "../../plugins/menu.list.js";
 export default {
     name: "NavigationDrawerCommon",
     mixins:[storeComputed],
-    props:['isKeycloack'],
     data: () => ({
         drawerItems: [],
         opened:[],
     }),
     created() {
-        this.drawerItems = Menu(this.isKeycloack)
+        this.drawerItems = Menu()
     }
 }
 </script>
