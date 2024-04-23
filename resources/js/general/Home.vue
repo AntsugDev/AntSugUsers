@@ -16,7 +16,6 @@
 <script>
 import ProgressBarCommon from "../component/Common/ProgressBarCommon.vue";
 import SnackBarCommon from "../component/Common/SnackBarCommon.vue";
-import AppBarMemberOrOperator from "../component/Common/AppBarMemberOrOperator.vue";
 import NavigationDrawerCommon from "../component/Common/NavigationDrawerCommon.vue";
 import AppBarClassic from "../component/Common/AppBarClassic.vue";
 import StoreComputed from "../mixins/storeComputed.js";
@@ -24,7 +23,7 @@ import LoginMixins from "../mixins/LoginMixins.js";
 
 export default {
     name: "Home",
-    components: {AppBarClassic, NavigationDrawerCommon, AppBarMemberOrOperator, SnackBarCommon, ProgressBarCommon},
+    components: {AppBarClassic, NavigationDrawerCommon, SnackBarCommon, ProgressBarCommon},
     mixins:[StoreComputed,LoginMixins],
     data: () => ({
         getWhoAmIRequest: {loading: true},

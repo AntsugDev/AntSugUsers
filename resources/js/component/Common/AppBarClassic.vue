@@ -1,7 +1,7 @@
 <template>
     <v-app-bar app color="primary" :clipped-left="true" class="elevation-1">
                     <v-app-bar-nav-icon  @click.stop="$store.commit('config/changeMini')" class="primary white--text"></v-app-bar-nav-icon>
-                    <v-toolbar-title class="white--text text-uppercase font-weight-bold">Segnalazioni</v-toolbar-title>
+                    <v-toolbar-title class="white--text text-uppercase font-weight-bold">AntSug</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-menu v-model="userMenu" :close-on-content-click="true" :offset-y="true" bottom>
                         <template v-slot:activator="{props }">

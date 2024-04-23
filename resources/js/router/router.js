@@ -19,9 +19,10 @@ const router = createRouter({
             component: Home,
             beforeEnter:(to,from,next) => {
                 let $jwt              = store.getters['user/getJwt'];
-                let $auth             = store.getters['user/getIsAuthenticated'];
+                let $auth             = $jwt.access_token !== null
                 let $expired          = $jwt.expired;
                 let $now    = moment();
+                console.log('$auth =>',$auth)
                 if(!$auth){
                     next({ name: 'Login'});
                 }else{

@@ -22,7 +22,7 @@ const getters = {
     getUser:function (state){
         return state.data.user
     },
-    getIsAuth:function (state){
+    getIsAuthenticated:function (state){
         return state.data.user.isAuthenticated
     }
 };

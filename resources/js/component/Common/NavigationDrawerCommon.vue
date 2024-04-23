@@ -44,7 +44,7 @@
         </template>
         <template v-slot:append>
             <div class="pa-2 mb-5">
-                <v-btn to="/api/documentation" icon="mdi-api" target="_blank" alt="Documentation" title="Documentation"></v-btn>
+                <v-btn  to="/api/documentation" icon="mdi-api" target="_blank" alt="Documentation" title="Documentation"></v-btn>
             </div>
         </template>
     </v-navigation-drawer>
@@ -52,7 +52,7 @@
 
 <script>
 import storeComputed from "../../mixins/storeComputed.js";
-import {Menu} from "../../plugins/menu.list.js";
+import {Menu} from "../../plugin/menu.list.js";
 
 export default {
     name: "NavigationDrawerCommon",
