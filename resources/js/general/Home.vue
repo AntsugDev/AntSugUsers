@@ -50,7 +50,7 @@ export default {
                 })
                 .catch(error => {
                     this.$store.commit('progress/update',false)
-
+                    this.$router.push({name:'Login',query:{_e: "Utente non autenticato"}})
                 })
                 .finally(() => {
                     this.$store.commit('progress/update',false)

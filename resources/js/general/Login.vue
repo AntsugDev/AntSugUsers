@@ -91,24 +91,33 @@ export default {
             this.$refs.form.validate().then(r => {
                 if(r.valid){
                     const formdata = new FormData();
-                    formdata.append("grant_type", "client_credentials");
+                    formdata.append("grant_type", "password");
                     formdata.append("client_id", this.config.oauthPasswordClient.id);
                     formdata.append("client_secret", this.config.oauthPasswordClient.secret);
                     formdata.append("username", this.email);
                     formdata.append("password", this.password);
                     formdata.append("scope", "*");
-
                     axiosInstance('/oauth/token',POST,formdata).then(r => {
                         this.loading = false;
                         this.$store.commit('user/token',r.data)
                         this.$router.push({name:'Home'});
                     }).catch(e => {
+                        console.log('e',e)
                         this.loading = false
                     })
                 }else
                     this.loading = false
             })
 
+        }
+    },
+    created() {
+        if(this.$route.query._e !== undefined){
+            this.$store.commit('snackbar/update',{
+                show: true,
+                text: this.$route.query._e,
+                color: 'error'
+            })
         }
     }
 }

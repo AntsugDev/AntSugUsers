@@ -2,12 +2,9 @@
 
 namespace App\Http\Api\WhoAmI\Controller;
 
-use App\Http\Api\Members\Resources\MemberResource;
-use App\Http\Api\Operators\Resources\OperatorResource;
-use App\Http\Api\Users\Resources\UserResource;
+use App\Http\Api\Users\Resource\UserResource;
+use App\Http\Api\Utils\FiltersTrait;
 use App\Http\Controllers\Controller;
-use App\Models\Members\Member;
-use App\Models\Operators\Operator;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -16,6 +13,7 @@ use Illuminate\Validation\UnauthorizedException;
 
 class WhoAmIController extends Controller
 {
+    use FiltersTrait;
 
     /**
      * @param Request $request
@@ -40,7 +38,7 @@ class WhoAmIController extends Controller
     {
         $requestAuthenticatable = $request->user();
         if ($requestAuthenticatable instanceof User) {
-            return (new UserResource($requestAuthenticatable))->response(request())->setStatusCode(Response::HTTP_OK);
+            return (new UserResource($this->load($requestAuthenticatable)))->response(request())->setStatusCode(Response::HTTP_OK);
         }
         throw new UnauthorizedException();
     }

@@ -3,6 +3,7 @@ import Login from "../general/Login.vue";
 import Home from "../general/Home.vue";
 import store from "../store/store.js";
 import moment from "moment";
+import Index from "../component/Task/Index.vue";
 
 const router = createRouter({
     history:createWebHistory(store.getters['config/appBasePath']),
@@ -29,9 +30,21 @@ const router = createRouter({
                     if($expired > $now){
                         next();
                     }else
-                        next({ name: 'Login' ,query:{errors:"Session exipred"}});
+                        next({ name: 'Login' ,query:{_e:"Session exipred"}});
                 }
-            }
+            },
+            children:[
+
+                {
+                    path:'task',
+                    name:'IndexTask',
+                    component:Index,
+                    children:[
+
+
+                    ]
+                }
+            ]
 
         },
 
