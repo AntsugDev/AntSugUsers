@@ -5,7 +5,7 @@
             <SnackBarCommon></SnackBarCommon>
             <NavigationDrawerCommon ></NavigationDrawerCommon>
             <AppBarClassic :user="user" :text-logout="textLogout"></AppBarClassic>
-            <v-main>
+            <v-main class="main-home">
                 <router-view></router-view>
             </v-main>
         </template>
@@ -64,4 +64,10 @@ export default {
     },
 }
 </script>
+<style>
+.v-main{
+    background: #D0D3D4;
+}
+
+</style>
 

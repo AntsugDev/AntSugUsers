@@ -3,7 +3,6 @@
             <v-col cols="2">
                 <v-select
                     label="Nr.Elementi"
-                    clearable
                     :items="select"
                     v-model="selectChange"
                     :loading="loading"

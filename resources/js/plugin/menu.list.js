@@ -4,7 +4,7 @@ export const Menu = () =>   {
     return [
 
         {
-            text:'Test pagination',
+            text:'Pagination',
             icon: 'mdi-book-open-page-variant',
             routeName: 'Pagination',
             children:[]

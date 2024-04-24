@@ -3,21 +3,38 @@
         <v-main>
             <router-view ></router-view>
             <v-row><v-col cols="12"></v-col></v-row>
-            <v-card>
+            <v-card elevation="3">
                 <v-card-title>
-                    <TitlePage title="Test per table pagination"></TitlePage>
+                    <TitlePage title="Pagination example"></TitlePage>
                 </v-card-title>
+
+                <v-card-text>
+                    <v-progress-linear indeterminate color="success" v-if="loading"></v-progress-linear>
+                    <template v-else>
+                        <v-container>
+                            <Headers @reload="reload" @searching="searching" ref="tableHeader"
+                                     :cols="headers"
+                                     :nr-cols="nrCols"
+                                     :is-check="isCheck"
+                                     search="true"
+                                     download="true"
+                                     @downloading="downloadCsv"
+                                     :loading-downlaod="loadingDownlaod"
+                            ></Headers>
+                            <Body
+                                :list="filterItems"
+                                :nr-cols="nrCols"
+                                :keys="keys"
+                                :is-check="isCheck"
+                            ></Body>
+                            <Footer ref="tableFooter" @reload="reload" :tot-elements="totElements" :props-select-change="size" :nr-page="pageTotal" :page="page"></Footer>
+                        </v-container>
+                    </template>
+                </v-card-text>
+                <v-card-actions>
+
+                </v-card-actions>
             </v-card>
-            <v-card-text>
-                <v-progress-linear indeterminate color="coldirettiGreen" v-if="loading"></v-progress-linear>
-                <template v-else>
-                    <v-container>
-                        <Headers @reload="reload" ref="tableHeader" :cols="headers" :nr-cols="nrCols"></Headers>
-                        <Body :list="item" :nr-cols="nrCols" :keys="keys"></Body>
-                        <Footer ref="tableFooter" @reload="reload" :tot-elements="totElements" :props-select-change="size" :nr-page="pageTotal" :page="page"></Footer>
-                    </v-container>
-                </template>
-            </v-card-text>
         </v-main>
     </v-app>
 </template>
@@ -52,7 +69,10 @@ export default {
             {name:'Codice Catastale',fields: 'codice_catastale',order: 'asc'},
         ],
         nrCols:null,
-        keys:[]
+        keys:[],
+        isCheck: true,
+        search:null,
+        loadingDownlaod: false
     }),
 
     methods:{
@@ -114,10 +134,56 @@ export default {
 
                 }
             }
+        },
+        searching: function (){
+            this.search = this.$refs.tableHeader.searchModel;
+
+        },
+        downloadCsv: function (){
+            this.loadingDownlaod = true
+            let queryString = "size="+this.totElements+"&page=0"
+            this.getCities(queryString).then(r => {
+                let contents = r.data.contents
+                let csv = "";
+                contents.forEach((row) => {
+                    csv += Object.values(row).join(';');
+                    csv += "\n";
+                });
+
+                const anchor = document.createElement('a');
+                anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+                anchor.target = '_blank';
+                anchor.download = 'download.csv';
+                anchor.click();
+
+                this.loadingDownlaod = false
+            }).catch(e => {
+                this.loadingDownlaod = false
+            })
+
         }
+    },
+    computed:{
+        filterItems : function (){
+            let filter = this.item
+            if(this.search !== null && this.search !== ""){
+                return filter.filter((e,i) => {
+                    let string = Object.values(e)
+                    return string.some((v) => {
+                        return v.toString().toUpperCase().indexOf(this.search.toString().toUpperCase()) !== -1
+                    })
+                })
+            }
+
+            return filter;
+
+        }
+
     },
     created() {
         this.nrCols = Math.round(this.cols/12)
+        if(this.isCheck)
+            this.nrCols = parseInt(this.nrCols)-parseInt(1)
         this.list(this.getQueryString());
         this.createKeys();
     }

@@ -15,8 +15,8 @@ class CitiesResource extends BaseResource
             "regione" => $this->resource->regione,
             "provinicia" => $this->resource->provinicia,
             "codice_catastale" => $this->resource->codice_catastale,
-            "created_at" => ($this->resource->created_at),
-            "updated_at" =>  ($this->resource->updated_at),
+            "created_at" => $this->convertDate($this->resource->created_at),
+            "updated_at" =>  $this->convertDate($this->resource->updated_at),
         ];
     }
 

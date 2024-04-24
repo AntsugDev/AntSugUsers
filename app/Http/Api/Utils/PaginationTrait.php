@@ -35,9 +35,10 @@ trait PaginationTrait
         return $collection->chunk($size);
     }
 
-    private function getChunk(Collection $collection){
+    private function getChunk(Collection $collection, int &$nrpage = 0){
         $parser = $this->getParser();
         $chunk = $this->_chunk($collection,$parser['size']);
+        $nrpage = count($chunk);
         return count($chunk) > 0 ? $chunk[$parser['page']] : $chunk;
     }
 
@@ -46,7 +47,7 @@ trait PaginationTrait
      */
     private function getPagination(Collection $collection,int &$nrpage = 0, int &$totalElement = 0){
         if($this->verify()) {
-            $totalElement =$collection->count() ;
+            $totalElement = $collection->count() ;
             return $this->getOrderSort($collection,$nrpage);
         }
         throw  new \Exception("Size and page not found");
@@ -54,8 +55,8 @@ trait PaginationTrait
 
     private function getOrderSort(Collection $collection,int &$nrpage = 0){
         $parser = $this->getParser();
-        $chunk  = $this->getChunk($collection);
-        $nrpage= count($chunk);
+        $chunk  = $this->getChunk($collection,$nrpage);
+
 
         if(array_key_exists('order',$parser) && strcmp($parser['order'],'desc') !== 0 && array_key_exists('sortBy',$parser) && strcmp($parser['sortBy'],'') !== 0)
             return  $chunk->sortBy(function ($item) use($parser){

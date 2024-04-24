@@ -1,5 +1,5 @@
 <template>
-    <v-toolbar density="compact" flat color="primary" dark>
+    <v-toolbar density="compact" flat color="info" dark>
         <v-icon class="ml-2" v-if="icon !== undefined">
             {{icon}}
         </v-icon>

@@ -7,12 +7,12 @@ import { it } from 'vuetify/locale'
 const tema = {
     dark: false,
     colors:{
-        primary: '#82E0AA',
+        primary: '#34495E',
         secondary: '#A6ACAF',
         accent: '#F1C40F',
         error: '#E74C3C',
-        info: '#2196F3',
-        success: '#82E0AA',
+        info: '#34495E',
+        success: '#34495E',
         warning: '#F0B27A',
     }
 }
