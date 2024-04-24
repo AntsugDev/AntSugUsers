@@ -4,6 +4,7 @@ import Home from "../general/Home.vue";
 import store from "../store/store.js";
 import moment from "moment";
 import Index from "../component/Task/Index.vue";
+import Pagination from "../component/Pagination/Pagination.vue";
 
 const router = createRouter({
     history:createWebHistory(store.getters['config/appBasePath']),
@@ -23,7 +24,6 @@ const router = createRouter({
                 let $auth             = $jwt.access_token !== null
                 let $expired          = $jwt.expired;
                 let $now    = moment();
-                console.log('$auth =>',$auth)
                 if(!$auth){
                     next({ name: 'Login'});
                 }else{
@@ -43,6 +43,11 @@ const router = createRouter({
 
 
                     ]
+                },
+                {
+                    path: 'pagination',
+                    component:Pagination,
+                    name: 'Pagination'
                 }
             ]
 

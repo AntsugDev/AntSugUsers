@@ -44,16 +44,18 @@ trait PaginationTrait
     /**
      * @throws \Exception
      */
-    private function getPagination(Collection $collection){
+    private function getPagination(Collection $collection,int &$nrpage = 0, int &$totalElement = 0){
         if($this->verify()) {
-            return $this->getOrderSort($collection);
+            $totalElement =$collection->count() ;
+            return $this->getOrderSort($collection,$nrpage);
         }
         throw  new \Exception("Size and page not found");
     }
 
-    private function getOrderSort(Collection $collection){
+    private function getOrderSort(Collection $collection,int &$nrpage = 0){
         $parser = $this->getParser();
         $chunk  = $this->getChunk($collection);
+        $nrpage= count($chunk);
 
         if(array_key_exists('order',$parser) && strcmp($parser['order'],'desc') !== 0 && array_key_exists('sortBy',$parser) && strcmp($parser['sortBy'],'') !== 0)
             return  $chunk->sortBy(function ($item) use($parser){
@@ -64,7 +66,7 @@ trait PaginationTrait
         return $chunk;
     }
 
-    private function pagination(): Collection
+    private function pagination(int $nrpage,int $totalElement): Collection
     {
         $parser = $this->getParser();
         $pagination = new Collection();
@@ -72,6 +74,8 @@ trait PaginationTrait
         $pagination->put("page", $parser['page']);
         $pagination->put("order", array_key_exists('order', $parser) ? $parser['order'] : 'desc');
         $pagination->put("sortBy", array_key_exists('sortBy', $parser) ? $parser['sortBy'] : null);
+        $pagination->put("totElement",$totalElement );
+        $pagination->put("totPage", $nrpage);
         return $pagination;
     }
 
@@ -82,8 +86,11 @@ trait PaginationTrait
     public function getResources($resourceCollection, Collection $collection): JsonResponse
     {
         try{
-            $collectionResource = new $resourceCollection($this->getPagination($collection));
-            $pagination = $this->pagination();
+            $nrpage = 0;
+            $totalElement = 0;
+            $orderSort = $this->getPagination($collection,$nrpage,$totalElement);
+            $collectionResource = new $resourceCollection($orderSort);
+            $pagination = $this->pagination($nrpage,$totalElement);
             $result = new Collection();
             $result->put("contents", $collectionResource);
             $result->put("pagination", $pagination);
