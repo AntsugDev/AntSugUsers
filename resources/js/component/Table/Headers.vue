@@ -1,15 +1,13 @@
 <template>
-<v-container>
+
     <v-row>
         <v-col v-for="(v,k) in cols" :key="k" :cols="nrCols">
             <div class="inline">
                 <p>{{v.name}}</p>
                 <v-icon @click="changeOrder(k)">{{v.order === 'desc' ? 'mdi-arrow-down-thin' : 'mdi-arrow-up-thin'}}</v-icon>
             </div>
-
         </v-col>
     </v-row>
-</v-container>
 
 
 </template>
@@ -38,7 +36,7 @@ export default {
 <style scoped>
 .v-col{
     border: 1px solid #000;
-    background-color: #A6ACAF;
+    background-color: #34495E;
     color: #fff;
 }
 p{

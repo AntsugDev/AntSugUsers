@@ -11,9 +11,11 @@
             <v-card-text>
                 <v-progress-linear indeterminate color="coldirettiGreen" v-if="loading"></v-progress-linear>
                 <template v-else>
-                    <Headers @reload="reload" ref="tableHeader" :cols="headers" :nr-cols="nrCols"></Headers>
-                    <Body :list="item" :nr-cols="nrCols"></Body>
-                    <Footer ref="tableFooter" @reload="reload" :tot-elements="totElements" :props-select-change="size" :nr-page="pageTotal" :page="page"></Footer>
+                    <v-container>
+                        <Headers @reload="reload" ref="tableHeader" :cols="headers" :nr-cols="nrCols"></Headers>
+                        <Body :list="item" :nr-cols="nrCols" :keys="keys"></Body>
+                        <Footer ref="tableFooter" @reload="reload" :tot-elements="totElements" :props-select-change="size" :nr-page="pageTotal" :page="page"></Footer>
+                    </v-container>
                 </template>
             </v-card-text>
         </v-main>
@@ -39,10 +41,8 @@ export default {
         size:5,
         page:0,
         table:{
-
             order:'desc',
             sortBy:null,
-
         },
         loading: false,
         headers:[
@@ -50,11 +50,9 @@ export default {
             {name:'Regione',fields: 'regione',order: 'desc'},
             {name:'Provincia',fields: 'provinicia',order: 'desc'},
             {name:'Codice Catastale',fields: 'codice_catastale',order: 'asc'},
-            {name:'Data Creazione',fields: 'created_at',order: 'asc'},
-            {name:'Data Aggiornamento',fields: 'updated_at',order: 'asc'},
         ],
-        nrCols:null
-
+        nrCols:null,
+        keys:[]
     }),
 
     methods:{
@@ -76,20 +74,28 @@ export default {
                 this.loading = false
             })
         },
-        reload: function (){
-            let header       = this.$refs.tableHeader.fields;
-            if(header !== null) {
-                this.table.order = header.order
-                this.table.sortBy = header.fields
-            }
+        reload: function (init){
+            if(init === undefined){
+                let header       = this.$refs.tableHeader.fields;
+                if(header !== null) {
+                    this.table.order = header.order
+                    this.table.sortBy = header.fields
+                }
+                let footerSelect = this.$refs.tableFooter.selectChange
+                if(footerSelect !== null) {
+                    this.size = footerSelect
+                }
 
-            let footerSelect = this.$refs.tableFooter.selectChange
-            if(footerSelect !== null)
+                let footerPage = this.$refs.tableFooter.pageNr
+                if(footerPage !== null)
+                    this.page = footerPage
+            }else{
+                let footerSelect = this.$refs.tableFooter.selectChange
                 this.size = footerSelect
-
-            let footerPage = this.$refs.tableFooter.pageNr
-            if(footerPage !== null)
-                this.page = footerPage
+                this.page =  0;
+                this.table.order = 'desc'
+                this.table.sortBy = null
+            }
 
             this.list(this.getQueryString())
         },
@@ -98,11 +104,22 @@ export default {
             if(this.table.order !== "desc" && this.table.sortBy !== null)
                 queryString +="&order="+this.table.order+"&sortBy="+this.table.sortBy
             return queryString;
+        },
+        createKeys: function (){
+            if(this.headers.length > 0){
+                for(let i = 0 ; i <this.headers.length; i++ ){
+                    let row = this.headers[i]
+                    let keys = row.fields
+                    this.keys.push(keys)
+
+                }
+            }
         }
     },
     created() {
         this.nrCols = Math.round(this.cols/12)
         this.list(this.getQueryString());
+        this.createKeys();
     }
 }
 </script>

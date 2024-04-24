@@ -1,7 +1,6 @@
 <template>
-    <v-container>
         <v-row>
-            <v-col cols="4">
+            <v-col cols="2">
                 <v-select
                     label="Nr.Elementi"
                     clearable
@@ -14,8 +13,8 @@
                 </v-select>
 
             </v-col>
-            <v-col cols="4"></v-col>
-            <v-col cols="4">
+            <v-col cols="6"></v-col>
+            <v-col cols="4" class="positon-cols">
 
                 <div class="iniline">
                     <v-icon class="icon-left" size="large" v-if="(parseInt(pageNr) > 0)" @click="updatePage(pageNr,false)">mdi-arrow-left-bold-circle-outline</v-icon>
@@ -25,9 +24,6 @@
 
             </v-col>
         </v-row>
-    </v-container>
-
-
 </template>
 
 <script>
@@ -45,17 +41,13 @@ export default {
             this.select = [5,10,20,50,this.totElements]
         },
         selectChangeUpdate: function (){
-            this.$emit("reload")
+            this.$emit("reload","init")
         },
         updatePage:function (index,isUp){
-            console.log("PRIMA",this.pageNr,index,isUp)
             if(isUp)
                 this.pageNr = parseInt(index)+parseInt(1)
             else
                 this.pageNr = parseInt(index)-parseInt(1)
-
-            console.log("DOPO",this.pageNr)
-
             this.$emit("reload")
 
         }
@@ -68,6 +60,10 @@ export default {
 }
 </script>
 <style scoped>
+.positon-cols{
+    text-align: right;
+    margin-top: 1vw;
+}
 .inline{
     display: inline-flex;
     float: left;
