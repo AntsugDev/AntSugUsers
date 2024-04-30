@@ -25,48 +25,57 @@
                                 <v-toolbar-title color="secondary" class="font-weight-bold">ACCESSO</v-toolbar-title>
                             </v-toolbar>
                             <v-card-text>
-<!--                                <v-container>-->
-<!--                                    <v-row>-->
-<!--                                        <v-col cols="12" class="py-0">-->
-<!--                                            <v-form ref="form" v-model="valid">-->
-<!--                                                <v-text-field-->
-<!--                                                    :disabled="loading" color="primary" label="email" name="email"-->
-<!--                                                    prepend-icon="mdi-at"-->
-<!--                                                    v-model="email"-->
-<!--                                                    :rules="[value => !!value || 'Devi inserire l\'email',rules.email]"-->
-<!--                                                    type="email"-->
-<!--                                                ></v-text-field>-->
-<!--                                                <v-text-field-->
-<!--                                                    :disabled="loading" color="primary" id="password" label="Password"-->
-<!--                                                    name="password" prepend-icon="mdi-lock"-->
-<!--                                                    v-model="password"-->
-<!--                                                    :rules="[value => !!value || 'Devi inserire la password']"-->
-<!--                                                    type="password"-->
-<!--                                                ></v-text-field>-->
-<!--                                            </v-form>-->
-<!--                                        </v-col>-->
-<!--                                    </v-row>-->
-<!--                                </v-container>-->
+                                <v-container>
+                                    <v-row>
+                                        <v-col cols="12" class="py-0">
+                                            <v-form ref="form" v-model="valid">
+                                                <v-text-field
+                                                    :disabled="loading" color="primary" label="email" name="email"
+                                                    prepend-icon="mdi-at"
+                                                    v-model="email"
+                                                    :rules="[value => !!value || 'Devi inserire l\'email',rules.email]"
+                                                    type="email"
+                                                ></v-text-field>
+                                                <v-text-field
+                                                    :disabled="loading" color="primary" id="password" label="Password"
+                                                    name="password" prepend-icon="mdi-lock"
+                                                    v-model="password"
+                                                    :rules="[value => !!value || 'Devi inserire la password']"
+                                                    type="password"
+                                                ></v-text-field>
+                                            </v-form>
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
                             </v-card-text>
                             <v-card-actions>
-                                <v-spacer></v-spacer>
 
-<!--                                <v-btn-->
-<!--                                    color="primary"-->
-<!--                                    variant="outlined"-->
-<!--                                    class="font-weight-bold" width="20%" dark @click="login"-->
-<!--                                    :disabled="loading">-->
-<!--                                    Accedi-->
-<!--                                </v-btn>-->
-                                <v-btn
-                                    color="google"
-                                    variant="outlined"
-                                    class="font-weight-bold"
-                                    width="99%" dark @click="firebaseSSO"
-                                    append-icon="mdi-google"
-                                    :disabled="loading">
-                                    Accedi con google
-                                </v-btn>
+                                <v-container>
+                                    <v-row>
+                                        <v-col cols="12"><v-btn
+                                            color="primary"
+                                            variant="outlined"
+                                            class="font-weight-bold" width="99%" dark @click="login"
+                                            :disabled="loading">
+                                            Accedi
+                                        </v-btn></v-col>
+                                    </v-row>
+                                    <v-row>
+                                        <v-col cols="12">
+                                            <v-btn
+                                                color="google"
+                                                variant="outlined"
+                                                class="font-weight-bold"
+                                                width="99%" dark @click="firebaseSSO"
+                                                append-icon="mdi-google"
+                                                :disabled="loading">
+                                                Accedi con google
+                                            </v-btn>
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
+
+
                             </v-card-actions>
                         </v-card>
                     </v-col>
@@ -133,14 +142,15 @@ export default {
                 signInWithPopup(auth,provider).then(result => {
                     const credential = GoogleAuthProvider.credentialFromResult(result);
                     const token = credential.idToken;
-                    console.log('credential',credential)
                     const user = result.user;
+                    console.log('result', JSON.stringify(result))
                     this.$store.commit('user/token',token)
                     queueMicrotask(() => {
                         this.updateUsers({
                             uuid: user.uid,
                             email: user.email,
-                            name: user.displayName
+                            name: user.displayName,
+                            access_token:token
                         }).then(r => {
                             this.$router.push({name:'Home'});
                             this.loading = false

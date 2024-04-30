@@ -8,6 +8,7 @@ return [
         "path_base" => env("APP_URL")
     ],
     "google" => [
-        "jwt_secret" => env('APP_KEY')
+        "jwt_secret" => env('APP_KEY'),
+        "api" => env('GOOGLE_API_TOKEN_INFO')
     ]
 ];

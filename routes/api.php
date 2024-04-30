@@ -24,8 +24,7 @@ Route::prefix(config('utils.prefix'))->group(function (){
 
         Route::get('root',[RootController::class,'index']);
         Route::post('login',[UserController::class,'login']);
-//        Route::resource('google',AccessGoogleController::class)->only(['store']);
-        Route::get('google',[AccessGoogleController::class,'store']);
+        Route::resource('google',AccessGoogleController::class)->only(['store']);
 
 
         Route::middleware('auth:api')->group(function (){
