@@ -44,10 +44,10 @@ return [
             'driver' => 'passport',
             'provider' => 'users',
         ],
-//        'google' => [
-//            'driver' => "google",
-//            'provider' => "access_google"
-//        ]
+        'google' => [
+            'driver' => "passport",
+            'provider' => "access_google"
+        ]
     ],
 
     /*
