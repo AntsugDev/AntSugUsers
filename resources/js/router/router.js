@@ -5,6 +5,7 @@ import store from "../store/store.js";
 import moment from "moment";
 import Index from "../component/Task/Index.vue";
 import Pagination from "../component/Pagination/Pagination.vue";
+import Keycloack from "../Keycloack/Keycloack.vue";
 
 const router = createRouter({
     history:createWebHistory(store.getters['config/appBasePath']),
@@ -14,7 +15,11 @@ const router = createRouter({
             name: 'Login',
             component: Login,
         },
-
+        {
+            path: '/keycloack',
+            component:Keycloack,
+            name: 'Keycloack'
+        },
         {
             path: '/',
             name: 'Home',

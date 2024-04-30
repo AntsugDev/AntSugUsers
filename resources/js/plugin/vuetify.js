@@ -14,6 +14,7 @@ const tema = {
         info: '#34495E',
         success: '#34495E',
         warning: '#F0B27A',
+        google:'#16A085',
     }
 }
 const vuetify = createVuetify({

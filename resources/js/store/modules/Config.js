@@ -4,6 +4,10 @@ const state = () => ({
     drawer:true,
     mini:false,
     oauthPasswordClient: {},
+    keycloack:{
+        realm: window.appConfig.keycloack.realm,
+        clientId: window.appConfig.keycloack.clientId
+    }
 
 });
 const getters = {
@@ -33,6 +37,9 @@ const mutations = {
     init(state,payload){
         state.oauthPasswordClient = payload.oauthPasswordClient
     },
+    getKeycloack: function (state){
+        return state.keycloack
+    }
 
 };
 

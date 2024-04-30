@@ -7,8 +7,10 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Validation\UnauthorizedException;
+use Illuminate\Validation\ValidationException;
 use SebastianBergmann\Invoker\TimeoutException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 use Throwable;
 
@@ -29,9 +31,10 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e)
     {
+//        dd($e);
         $accept_json = $request->expectsJson();
         if($e instanceof NotFoundHttpException ){
-           return  redirect('/');
+            return  redirect('/');
         }
         else if($e instanceof  UnauthorizedException || $e instanceof TimeoutException){
             $response = new Response();
@@ -50,12 +53,31 @@ class Handler extends ExceptionHandler
         }
         else if ($accept_json) {
 
-            return  new JsonResponse(array("errors" => array(
-                "instance" => get_class($e),
-                "file" => $e->getFile(),
-                "line" => $e->getLine(),
-                "message" => $e->getMessage()
-            )),Response::HTTP_UNPROCESSABLE_ENTITY);
+            if($e instanceof ValidationException){
+
+                $errors = [];
+                $message_bag = $e->validator->getMessageBag();
+                foreach ($message_bag->keys() as $field) {
+                    $field_errors = $message_bag->get($field);
+                    foreach ($field_errors as $field_error)
+                        array_push(
+                            $errors,
+                            [
+                                "status" => 422,
+                                "source"  => $field,
+                                "detail" => $field_error,
+                            ]
+                        );
+                }
+                return new JsonResponse(["errors"=> $errors], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+
+            }else
+                return  new JsonResponse(array("errors" => array(
+                    "instance" => get_class($e),
+                    "file" => $e->getFile(),
+                    "line" => $e->getLine(),
+                    "message" => $e->getMessage()
+                )),Response::HTTP_UNPROCESSABLE_ENTITY);
 
         }
         return parent::render($request, $e);

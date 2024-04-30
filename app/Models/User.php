@@ -26,6 +26,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'google_id'
     ];
 
     /**
@@ -51,5 +52,9 @@ class User extends Authenticatable
     public function role (): BelongsTo
     {
         return $this->belongsTo(Role::class,'role_id');
+    }
+
+    public function social(){
+        return $this->hasMany(\Pimplesushant\Laravelsocialiteapi\SocialAccount::class)->with('google');
     }
 }

@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
             UserSeeders::class,
 
             //pagination
-            CitiesSeeders::class
+            //CitiesSeeders::class
         ]);
     }
 }

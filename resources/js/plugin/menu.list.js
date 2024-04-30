@@ -8,6 +8,8 @@ export const Menu = () =>   {
             icon: 'mdi-book-open-page-variant',
             routeName: 'Pagination',
             children:[]
-        }
+        },
+
+
     ];
 }

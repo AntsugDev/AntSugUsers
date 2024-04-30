@@ -44,6 +44,10 @@ return [
             'driver' => 'passport',
             'provider' => 'users',
         ],
+//        'google' => [
+//            'driver' => "google",
+//            'provider' => "access_google"
+//        ]
     ],
 
     /*
@@ -68,6 +72,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+        'access_google' => [
+            "driver" => "eloquent",
+            'model' => \App\Models\Google\AccessGoogle::class
+        ]
 
         // 'users' => [
         //     'driver' => 'database',

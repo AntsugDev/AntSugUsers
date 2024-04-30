@@ -25,36 +25,47 @@
                                 <v-toolbar-title color="secondary" class="font-weight-bold">ACCESSO</v-toolbar-title>
                             </v-toolbar>
                             <v-card-text>
-                                <v-container>
-                                    <v-row>
-                                        <v-col cols="12" class="py-0">
-                                            <v-form ref="form" v-model="valid">
-                                                <v-text-field
-                                                    :disabled="loading" color="primary" label="email" name="email"
-                                                    prepend-icon="mdi-at"
-                                                    v-model="email"
-                                                    :rules="[value => !!value || 'Devi inserire l\'email',rules.email]"
-                                                    type="email"
-                                                ></v-text-field>
-                                                <v-text-field
-                                                    :disabled="loading" color="primary" id="password" label="Password"
-                                                    name="password" prepend-icon="mdi-lock"
-                                                    v-model="password"
-                                                    :rules="[value => !!value || 'Devi inserire la password']"
-                                                    type="password"
-                                                ></v-text-field>
-                                            </v-form>
-                                        </v-col>
-                                    </v-row>
-                                </v-container>
+<!--                                <v-container>-->
+<!--                                    <v-row>-->
+<!--                                        <v-col cols="12" class="py-0">-->
+<!--                                            <v-form ref="form" v-model="valid">-->
+<!--                                                <v-text-field-->
+<!--                                                    :disabled="loading" color="primary" label="email" name="email"-->
+<!--                                                    prepend-icon="mdi-at"-->
+<!--                                                    v-model="email"-->
+<!--                                                    :rules="[value => !!value || 'Devi inserire l\'email',rules.email]"-->
+<!--                                                    type="email"-->
+<!--                                                ></v-text-field>-->
+<!--                                                <v-text-field-->
+<!--                                                    :disabled="loading" color="primary" id="password" label="Password"-->
+<!--                                                    name="password" prepend-icon="mdi-lock"-->
+<!--                                                    v-model="password"-->
+<!--                                                    :rules="[value => !!value || 'Devi inserire la password']"-->
+<!--                                                    type="password"-->
+<!--                                                ></v-text-field>-->
+<!--                                            </v-form>-->
+<!--                                        </v-col>-->
+<!--                                    </v-row>-->
+<!--                                </v-container>-->
                             </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
+
+<!--                                <v-btn-->
+<!--                                    color="primary"-->
+<!--                                    variant="outlined"-->
+<!--                                    class="font-weight-bold" width="20%" dark @click="login"-->
+<!--                                    :disabled="loading">-->
+<!--                                    Accedi-->
+<!--                                </v-btn>-->
                                 <v-btn
-                                    color="primary"
-                                    class="font-weight-bold" width="100%" dark @click="login"
+                                    color="google"
+                                    variant="outlined"
+                                    class="font-weight-bold"
+                                    width="99%" dark @click="firebaseSSO"
+                                    append-icon="mdi-google"
                                     :disabled="loading">
-                                    Accedi
+                                    Accedi con google
                                 </v-btn>
                             </v-card-actions>
                         </v-card>
@@ -68,11 +79,13 @@
 import SnackBarCommon from "../component/Common/SnackBarCommon.vue";
 import {axiosInstance, POST} from "../plugin/instance.api.js";
 import storeComputed from "../mixins/storeComputed.js";
-
+import {GoogleAuthProvider ,getAuth,signInWithPopup } from "firebase/auth";
+import firebase from "../plugin/firebase.js";
+import Google from "../mixins/Google.js";
 export default {
     name: "Login",
     components: {SnackBarCommon},
-    mixins:[storeComputed],
+    mixins:[storeComputed,Google],
     data:()=> ({
         valid: false,
         loading:false,
@@ -102,13 +115,54 @@ export default {
                         this.$store.commit('user/token',r.data)
                         this.$router.push({name:'Home'});
                     }).catch(e => {
-                        console.log('e',e)
                         this.loading = false
                     })
                 }else
                     this.loading = false
             })
 
+        },
+        keycloak: function (){
+            this.$router.push({name:'Keycloack'})
+        },
+        firebaseSSO: function (){
+            try {
+                this.loading = true
+                const auth = getAuth();
+                const provider = new GoogleAuthProvider();
+                signInWithPopup(auth,provider).then(result => {
+                    const credential = GoogleAuthProvider.credentialFromResult(result);
+                    const token = credential.idToken;
+                    console.log('credential',credential)
+                    const user = result.user;
+                    this.$store.commit('user/token',token)
+                    queueMicrotask(() => {
+                        this.updateUsers({
+                            uuid: user.uid,
+                            email: user.email,
+                            name: user.displayName
+                        }).then(r => {
+                            this.$router.push({name:'Home'});
+                            this.loading = false
+                        }).catch(e => {
+                            this.loading = false
+                        })
+                    })
+                }).catch(e => {
+                    const errorMessage = error.message;
+                    this.$store.commit('snackbar/update',{
+                        show:true,
+                        text: errorMessage,
+                        color: 'error'
+                    })
+
+                    const credential = GoogleAuthProvider.credentialFromError(error);
+                    this.loading = false
+                })
+            } catch (error) {
+                console.error(error);
+                // Handle error
+            }
         }
     },
     created() {

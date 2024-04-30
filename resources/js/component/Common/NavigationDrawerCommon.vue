@@ -17,8 +17,6 @@
                             :prepend-icon="item.icon"
                         ></v-list-item>
                     </template>
-
-
                     <v-list-item
                         nav
                         link
@@ -28,8 +26,9 @@
                         :title="subMenu.text"
                         :prepend-icon="subMenu.icon"
                         :to="{name:subMenu.routeName}"
-                    >
-                    </v-list-item>
+                    ></v-list-item>
+
+
                 </v-list-group>
             </v-list>
 

@@ -20,6 +20,7 @@ import NavigationDrawerCommon from "../component/Common/NavigationDrawerCommon.v
 import AppBarClassic from "../component/Common/AppBarClassic.vue";
 import StoreComputed from "../mixins/storeComputed.js";
 import LoginMixins from "../mixins/LoginMixins.js";
+import { getAuth, signOut } from "firebase/auth";
 
 export default {
     name: "Home",
@@ -51,6 +52,12 @@ export default {
                 .catch(error => {
                     this.$store.commit('progress/update',false)
                     this.$router.push({name:'Login',query:{_e: "Utente non autenticato"}})
+                    const auth = getAuth();
+                    signOut(auth).then(() => {
+                        // Sign-out successful.
+                    }).catch((error) => {
+                        // An error happened.
+                    });
                 })
                 .finally(() => {
                     this.$store.commit('progress/update',false)
