@@ -143,8 +143,7 @@ export default {
                     const credential = GoogleAuthProvider.credentialFromResult(result);
                     const token = credential.idToken;
                     const user = result.user;
-                    console.log('result', JSON.stringify(result))
-                    this.$store.commit('user/token',token)
+
                     queueMicrotask(() => {
                         this.updateUsers({
                             uuid: user.uid,
@@ -152,6 +151,7 @@ export default {
                             name: user.displayName,
                             access_token:token
                         }).then(r => {
+                            this.$store.commit('user/token',r.data.token)
                             this.$router.push({name:'Home'});
                             this.loading = false
                         }).catch(e => {
