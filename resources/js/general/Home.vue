@@ -43,6 +43,7 @@ export default {
                         firstName: response.data.data.first_name,
                         lastName: response.data.data.last_name,
                         email: response.data.data.email,
+                        google: response.data.data.google_account === 1
                     });
                     this.user = this.$store.getters['user/getUser'];
 
@@ -54,9 +55,9 @@ export default {
                     this.$router.push({name:'Login',query:{_e: "Utente non autenticato"}})
                     const auth = getAuth();
                     signOut(auth).then(() => {
-                        // Sign-out successful.
+                        console.log('logout google ok')
                     }).catch((error) => {
-                        // An error happened.
+                        console.log('logout google ko',error)
                     });
                 })
                 .finally(() => {

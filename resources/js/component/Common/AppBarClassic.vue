@@ -1,7 +1,7 @@
 <template>
     <v-app-bar app color="primary" :clipped-left="true" class="elevation-1">
                     <v-app-bar-nav-icon  @click.stop="$store.commit('config/changeMini')" class="primary white--text"></v-app-bar-nav-icon>
-                    <v-toolbar-title class="white--text text-uppercase font-weight-bold">AntSug</v-toolbar-title>
+                    <v-toolbar-title class="white--text text-uppercase font-weight-bold">{{title}}</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-menu v-model="userMenu" :close-on-content-click="true" :offset-y="true" bottom>
                         <template v-slot:activator="{props }">
@@ -12,7 +12,7 @@
                         <v-card>
                             <v-list>
                                 <v-list-item prepend-icon="mdi-account">
-                                    <v-list-item-title>{{ user.firstName +' '+user.lastName}}</v-list-item-title>
+                                    <v-list-item-title>{{ user.firstName +(user.lastName !== null ? ' '+user.lastName: '')}}</v-list-item-title>
                                     <v-list-item-subtitle>{{ user.email }}</v-list-item-subtitle>
                                 </v-list-item>
                             </v-list>
@@ -34,6 +34,7 @@ export default {
     props:['textLogout','user'],
     data: () => ({
         userMenu: false,
+        title: 'AntSug'
     }),
     methods:{
         logout: function (){
@@ -41,6 +42,11 @@ export default {
             this.$router.push({name : 'Login', query: {errors:"Logout effettuato"} })
             localStorage.clear()
         },
+    },
+    created() {
+        if(this.$store.getters['user/getGoogle']){
+            this.title = "Task and Work register"
+        }
     }
 }
 </script>

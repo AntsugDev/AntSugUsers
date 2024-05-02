@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Http\Api\Utils\FiltersTrait;
+use App\Models\Google\GoogleAccess;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -12,6 +13,8 @@ use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @method static create(array $array)
+ * @method static firstOrCreate(array $array)
+ * @method static where(string $string, mixed $input)
  */
 class User extends Authenticatable
 {
@@ -24,6 +27,9 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'email',
+        'first_name',
+        'password',
+        "google_account"
     ];
 
     /**
@@ -51,7 +57,5 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class,'role_id');
     }
 
-    public function social(){
-        return $this->hasMany(\Pimplesushant\Laravelsocialiteapi\SocialAccount::class)->with('google');
-    }
+
 }

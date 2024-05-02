@@ -3,13 +3,17 @@
 namespace App\Http\Api\Google\Controller;
 
 use App\Http\Api\Google\Request\AccessGoogleRequest;
+use App\Http\Api\Users\Resource\UserResource;
 use App\Http\Controllers\Controller;
 use App\Models\Google\AccessGoogle;
+use App\Models\Google\GoogleAccess;
 use App\Models\User;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\UnauthorizedException;
 use Laravel\Passport\Passport;
 use Laravel\Passport\Token;
@@ -28,60 +32,60 @@ class AccessGoogleController extends Controller
         if(is_array($payload)){
             $user = User::where('email',$request->input('email'))->first();
             if($user instanceof  User){
-//                Token::where('user_id',$user->id)->delete();
-                $token = $user->createToken('bearer token')->accessToken;
-                return response()->json(['token' => $token]);
+                return (new UserResource($user))->response($request)->setStatusCode(Response::HTTP_OK);
             }else{
-                $user = User::firstOrCreate([
-                    "email" => $request->input('email'),
-                    "first_name" => $request->input('name')
+                $name = strtoupper($request->input('name'));
+                $email = $request->input('email');
+                $user = User::create(
+                    [
+                        'first_name' =>  $name,
+                        'last_name' => null,
+                        'email' => $email,
+                        'password' => Hash::make($email),
+                        'email_verified_at' => Carbon::now(),
+                        "google_account" => true
+                    ]
+
+                );
+                GoogleAccess::create([
+                    "user_id" => $user->id,
+                    "payload" => json_encode($payload,true),
+                    "tk" => Hash::make($request->input('access_token'))
                 ]);
-                Token::where('user_id',$user->id)->delete();
-                $token = $user->createToken('bearer token')->accessToken;
-                return response()->json(['token' => $token]);
+                return (new UserResource($user))->response($request)->setStatusCode(Response::HTTP_CREATED);
             }
 
         }
         throw new UnauthorizedException("Account google non autorizzato");
 
-//        if($request->validationData()){
-//            $data = $request->validationData();
-//
-//            $find = AccessGoogle::where('email',$data['email'])->count();
-//            if($find > 0){
-//                return $this->_response();
-//            }else{
-//                try{
-//                    $client = new Client();
-//                    $response = $client->get(config('utils.google.api'), [
-//                        "query" => [
-//                            "id_token" => $data['access_token']
-//                        ]
-//                    ]);
-//                    if (strcmp($response->getStatusCode(), 200) === 0) {
-//                        $body = json_decode($response->getBody()->getContents(), true);
-//                        AccessGoogle::create([
-//                            "email" => $body['email'],
-//                            "name" => $data['name'],
-//                            "id_request" => $body['sub']
-//                        ]);
-//                        return $this->_response();
-//
-//                    } else
-//                        throw  new UnauthorizedException("Account google is not autorizzation");
-//                }catch (\Exception|GuzzleException|ClientException $e){
-//                    throw  new \Exception($e->getMessage());
-//                }
-//
-//            }
-//
-//        }
 
     }
 
-    protected function _response(){
-        $response = new Response();
-        return $response->setStatusCode(Response::HTTP_CREATED)->send();
-    }
+    /**
+     * @throws GuzzleException
+     * @throws \Exception
+     */
+    protected function regenerateToken($username, $password){
+        try{
+            $client = new Client([
+                "base_uri" => config('utils.path_api_base')
+            ]);
+            $response = $client->post('/oauth/token',[
+                "form_params" => [
+                    "grant_type" => "password",
+                    "client_id" => "",
+                    "client_secret" => "",
+                    "username" => $username,
+                    "password" => $password
+                ]
+            ]);
+            if(strcmp($response->getStatusCode(),200) !== 0)
+                throw  new UnauthorizedException("Passport user not authorizzation");
 
+            $body = json_decode($response->getBody()->getContents(),true);
+            return $body['access_token'];
+        }catch (\Exception|GuzzleException $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
 }

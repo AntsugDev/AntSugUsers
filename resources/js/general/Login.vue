@@ -151,9 +151,22 @@ export default {
                             name: user.displayName,
                             access_token:token
                         }).then(r => {
-                            this.$store.commit('user/token',r.data.token)
-                            this.$router.push({name:'Home'});
-                            this.loading = false
+                            let data = r.data.data;
+                            const formdata = new FormData();
+                            formdata.append("grant_type", "password");
+                            formdata.append("client_id", this.config.oauthPasswordClient.id);
+                            formdata.append("client_secret", this.config.oauthPasswordClient.secret);
+                            formdata.append("username", data.email);
+                            formdata.append("password", data.email);
+                            formdata.append("scope", "*");
+                            axiosInstance('/oauth/token',POST,formdata).then(r => {
+                                this.loading = false;
+                                this.$store.commit('user/token',r.data)
+                                this.$router.push({name:'Home'});
+                            }).catch(e => {
+                                this.loading = false
+                            })
+
                         }).catch(e => {
                             this.loading = false
                         })

@@ -11,6 +11,7 @@ const state = () => ({
             firstName:null,
             lastName:null,
             email:null,
+            google:false
         }
     }
 });
@@ -24,6 +25,9 @@ const getters = {
     },
     getIsAuthenticated:function (state){
         return state.data.user.isAuthenticated
+    },
+    getGoogle: function (state){
+        return state.data.user.google
     }
 };
 const actions = {};
