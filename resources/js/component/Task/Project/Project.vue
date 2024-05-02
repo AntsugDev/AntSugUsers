@@ -2,11 +2,11 @@
 
     <v-app v-if="!$store.getters['progress/getShow']">
         <v-main>
-            <router-view ></router-view>
+            <router-view @reload="getList" ></router-view>
             <v-row><v-col cols="12"></v-col></v-row>
             <v-card elevation="3">
                 <v-card-title>
-                    <TitlePage title="Project" :action="addPortalProject" icon_btn="mdi-plus" alt="Aggiungi progetto"></TitlePage>
+                    <TitlePage title="Project" :action="create" icon_btn="mdi-plus" alt="Aggiungi progetto"></TitlePage>
                 </v-card-title>
                 <v-card-text>
                     <v-data-table
@@ -64,8 +64,8 @@ export default {
                 this.loading = false
             })
         },
-        addPortalProject: function (){
-
+        create: function (){
+            this.$router.push({name:'CreateProject'})
         }
     },
     created() {

@@ -32,4 +32,8 @@ class ProjectAndGroupController extends Controller
         }
         return null;
     }
+
+    public function destroy(User $user){
+
+    }
 }

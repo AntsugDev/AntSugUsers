@@ -7,6 +7,7 @@ import Index from "../component/Task/Index.vue";
 import Pagination from "../component/Pagination/Pagination.vue";
 import Keycloack from "../Keycloack/Keycloack.vue";
 import Project from "../component/Task/Project/Project.vue";
+import CreateProject from "../component/Task/Project/Dialog/CreateProject.vue";
 
 const router = createRouter({
     history:createWebHistory(store.getters['config/appBasePath']),
@@ -58,7 +59,14 @@ const router = createRouter({
                 {
                     path: 'project',
                     component:Project,
-                    name: 'Project'
+                    name: 'Project',
+                    children:[
+                        {
+                            path: 'create',
+                            component:CreateProject,
+                            name: 'CreateProject'
+                        }
+                    ]
                 }
             ]
 
