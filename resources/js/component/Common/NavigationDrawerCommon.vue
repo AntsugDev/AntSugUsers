@@ -41,7 +41,7 @@
                 ></v-list-item>
             </v-list>
         </template>
-        <template v-slot:append>
+        <template v-slot:append v-if="!this.$store.getters['user/getGoogle']">
             <div class="pa-2 mb-5">
                 <v-btn  to="/api/documentation" icon="mdi-api" target="_blank" alt="Documentation" title="Documentation"></v-btn>
             </div>

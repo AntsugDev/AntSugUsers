@@ -39,6 +39,7 @@ export default {
             this.getWhoAmI()
                 .then(response => {
                     this.$store.commit('user/update', {
+                        id: response.data.data.id,
                         isAuthenticated: true,
                         firstName: response.data.data.first_name,
                         lastName: response.data.data.last_name,

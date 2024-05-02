@@ -6,6 +6,7 @@ import moment from "moment";
 import Index from "../component/Task/Index.vue";
 import Pagination from "../component/Pagination/Pagination.vue";
 import Keycloack from "../Keycloack/Keycloack.vue";
+import Project from "../component/Task/Project/Project.vue";
 
 const router = createRouter({
     history:createWebHistory(store.getters['config/appBasePath']),
@@ -53,6 +54,11 @@ const router = createRouter({
                     path: 'pagination',
                     component:Pagination,
                     name: 'Pagination'
+                },
+                {
+                    path: 'project',
+                    component:Project,
+                    name: 'Project'
                 }
             ]
 

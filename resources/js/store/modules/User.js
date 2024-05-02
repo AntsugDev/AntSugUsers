@@ -7,6 +7,7 @@ const state = () => ({
             access_token: null,
         },
         user:{
+            id:null,
             isAuthenticated: false,
             firstName:null,
             lastName:null,
@@ -22,6 +23,9 @@ const getters = {
     },
     getUser:function (state){
         return state.data.user
+    },
+    getUserId:function (state){
+      return state.data.user.id
     },
     getIsAuthenticated:function (state){
         return state.data.user.isAuthenticated

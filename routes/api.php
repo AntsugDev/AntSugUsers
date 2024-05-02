@@ -3,6 +3,7 @@
 use App\Http\Api\Google\Controller\AccessGoogleController;
 use App\Http\Api\Pagination\Controller\PaginationController;
 use App\Http\Api\Passport\Controller\RootController;
+use App\Http\Api\Task\ProjectAndGroup\Controller\ProjectAndGroupController;
 use App\Http\Api\Users\Controller\UserController;
 use App\Http\Api\WhoAmI\Controller\WhoAmIController;
 use Illuminate\Http\Request;
@@ -30,6 +31,9 @@ Route::prefix(config('utils.prefix'))->group(function (){
         Route::middleware('auth:api')->group(function (){
             Route::get('who_am_i', [WhoAmIController::class, 'who_am_i']);
             Route::resource('pagination',PaginationController::class)->only(['index']);
+
+            Route::resource('users.project',ProjectAndGroupController::class)->only(['index','store']);
+
         });
     });
 
