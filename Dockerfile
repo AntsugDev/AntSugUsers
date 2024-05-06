@@ -11,9 +11,8 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 COPY conf/entrypoint.sh  /usr/local/bin/entrypoint.sh
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-USER asugamele
 
-WORKDIR /var/www/html/${USER}
+WORKDIR /var/www/html/asugamele
 COPY . .
 
 
